@@ -16,8 +16,10 @@ export class UsersController {
 
     }
 
-    @Get('sayHello')
-    async sayHello(){
+
+
+    @Post('sayHello')
+    async sayHello():Promise<any>{
         return await this.userService.sayHello();
     }
 

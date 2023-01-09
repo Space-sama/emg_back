@@ -8,19 +8,34 @@ import { CreateUserDTO } from 'src/dtos/create-users.dto';
 import * as mongoose from 'mongoose';
 import * as moment from 'moment';
 import { Cron, CronExpression } from '@nestjs/schedule/dist';
+import { MailerService } from '@nestjs-modules/mailer';
+import { SendGridService } from "@anchan828/nest-sendgrid";
 
 
 @Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(Book.name) private bookModel: Model<BookDocument>){
+    @InjectModel(Book.name) private bookModel: Model<BookDocument>,
+    private sendServer: SendGridService){
 
     }
 
     // @Cron(CronExpression.EVERY_5_SECONDS)
-    async sayHello(){
-        await console.log("helloo Oussama...");
+    async sayHello():Promise<any>{
+        let sending = await this.sendServer.send({
+            to: '<pseudoxr@gmail.com>',
+            from:'<pseudoxr@gmail.com>',
+            subject: 'Test subject here....',
+            text: 'Hello ......',
+            html: "<strong>Best regards.</strong>"
+        });
+        if(sending){
+            return("Succeeeeess...");
+
+        }else {
+            return("fail...");
+        }
     }
      
     async getAllUsers(){
@@ -100,7 +115,6 @@ export class UsersService {
         let userCreated = await userToSave.save();
         await this.bookModel.findByIdAndUpdate({"_id": userCreated.book[0]}, { "$set": { "isIssued": true, 
         "issuedByFirstName": userObj.firstName, "issuedByLastName": userObj.lastName}}).exec();
-        // console.log("id book is :", userCreated.book[0]);
         return userCreated;
     }
 
@@ -119,6 +133,7 @@ export class UsersService {
     }
 
 
+
     @Cron(CronExpression.EVERY_5_SECONDS)
     async getWhenShouldReturnBook(){
         const allUsers = await this.userModel.find({"shouldReturn": false }).exec();
@@ -128,6 +143,13 @@ export class UsersService {
                 console.log("i saw number 0..");
                 await this.userModel.findByIdAndUpdate({_id: allUsers[i]._id}, { "$set": { "shouldReturn": true}}).exec();
                 await this.bookModel.findByIdAndUpdate({_id: allUsers[i].book[0]}, { "$set": { "shouldBeReturned": true}}).exec();
+                await this.sendServer.send({
+                    to: 'hawkander.666@gmail.com',
+                    from:'hawkander.666@gmail.com',
+                    subject: 'Test subject here....',
+                    text: 'Hello ......',
+                });
+                console.log("Succeeeeess...");
             }
             // }else if(moment(allUsers[i].dateRestitution).add(1, 'days').date() < moment(Date.now()).add(1, 'days').date()){
             //     console.log("Its under 0 !!!!")
