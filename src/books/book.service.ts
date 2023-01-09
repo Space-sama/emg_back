@@ -19,6 +19,38 @@ export class BookService {
         return await this.bookModel.find({isIssued: 'false'}).populate('domain').exec();
      }
 
+     async getByFields(title: String, author: String,  edition?: Date, editor?: String, label?: String){
+        let objFounded= await this.bookModel.find({
+                  $or: [
+                    {
+                      "nameBook": title
+                    },
+                    {
+                      "author": author
+                    },
+                    {
+                      "edition": edition
+                    },
+                    {
+                      "editor": editor
+                    },
+                    {
+                      "domain": label
+                    },
+                    
+                    
+                  ]
+        }).populate('domain').exec();
+        return objFounded;
+     }
+    //  {
+    //   "domain":[
+    //     {
+    //       "_id": label
+    //     }
+    //   ] 
+    // }
+
     async getOneBook(idBook):Promise<any> {
         return this.bookModel.findOne({_id: idBook}).populate('domain').exec();
     }

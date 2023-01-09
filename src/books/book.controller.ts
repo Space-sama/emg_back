@@ -27,6 +27,16 @@ export class BooksController {
         return this.bookService.getOneBook(idBook);
     }
 
+    @Post('/getByFields')
+    getByFields(@Body() bookObj:UpdateBookDTO){
+        return this.bookService.getByFields(bookObj.nameBook, bookObj.author, bookObj.edition, bookObj.editor, bookObj.domain);
+    }
+
+    // @Get('/getByFields/:nameBook/:author/:label')
+    // getByFields(@Param('nameBook') nameBook?: String, @Param('author') author?:String, @Param('label') label?:String){
+    //     return this.bookService.getByFields(nameBook, author, label);
+    // }
+
     @Post()
     // @UsePipes(BookValidationPipes)
     addOneBook(@Body() bookObj:CreateBookDTO):Promise<any>{
@@ -34,7 +44,7 @@ export class BooksController {
     }
 
     @Put(':id')
-    async updateOneBook(@Param('id') id, @Body() bookObj:UpdateBookDTO){
+    async updateOneBook(@Param('id') id, @Body() bookObj:UpdateBookDTO) {
         return this.bookService.updateOneBook(id, bookObj);
     }
 
