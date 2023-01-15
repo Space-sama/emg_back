@@ -10,6 +10,7 @@ import { Book_Req_Module } from './book_requests/book_req.module';
 import { AdminModule } from './admin/admin.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { SendGridModule } from "@anchan828/nest-sendgrid";
+import { ConfigModule } from '@nestjs/config';
 
 require("dotenv").config();
 
@@ -17,7 +18,7 @@ require("dotenv").config();
 
   imports: [
     SendGridModule.forRoot({
-      apikey: "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",
+      apikey: "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",
     }),
     // MailerModule.forRoot(
     //   {
@@ -26,11 +27,9 @@ require("dotenv").config();
     //       secure: false,
     //       auth: {
     //         user: 'apikey',
-    //         pass: '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',
+    //         pass: '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',
     //       },
-    //       defaults: {
-    //         from: '<pseudoxr@gmail.com>'
-    //       },
+          
     //     }
     //   }
     // ),
@@ -39,6 +38,7 @@ require("dotenv").config();
     CategoryModule,
     Book_Req_Module,
     AdminModule,
+    
     
     // MongooseModule.forRoot(
     // `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.ljs3d.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`

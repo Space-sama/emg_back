@@ -8,35 +8,47 @@ import { CreateUserDTO } from 'src/dtos/create-users.dto';
 import * as mongoose from 'mongoose';
 import * as moment from 'moment';
 import { Cron, CronExpression } from '@nestjs/schedule/dist';
-import { MailerService } from '@nestjs-modules/mailer';
+// import { MailerService } from '@nestjs-modules/mailer';
 import { SendGridService } from "@anchan828/nest-sendgrid";
-
+import * as SendGrid from '@sendgrid/mail';
+import { ConfigService } from '@nestjs/config/dist';
 
 @Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(Book.name) private bookModel: Model<BookDocument>,
-    private sendServer: SendGridService){
+    @InjectModel(Book.name) private bookModel: Model<BookDocument>, private readonly sendgridService: SendGridService){
 
     }
 
+
+    async send() {
+          return await this.sendgridService.send({
+            to: "oussama.elharmali@gmail.com",
+            subject: 'Hello from sendgrid',
+            from: 'pseudoxr@gmail.com', // Fill it with your validated email on SendGrid account
+            text: 'Hello',
+            html: '<h1>Hello</h1>',
+          });
+      }
+    //private sendServer: SendGridService
     // @Cron(CronExpression.EVERY_5_SECONDS)
-    async sayHello():Promise<any>{
-        let sending = await this.sendServer.send({
-            to: '<pseudoxr@gmail.com>',
-            from:'<pseudoxr@gmail.com>',
-            subject: 'Test subject here....',
-            text: 'Hello ......',
-            html: "<strong>Best regards.</strong>"
-        });
-        if(sending){
-            return("Succeeeeess...");
+    // async sayHello():Promise<any> {
+    //     let sending = this.mailService.sendMail({
+    //         to: 'hawkander.666@gmail.com',
+    //         from: 'pseudoxr@gmail.com',
+    //         subject: 'This a test !!!!....',
+    //         text: 'SALAM ......',
+    //         inReplyTo: "pseudoxr@gmail.com"
+    //     });
+    //     if(sending){
+    //         return("Succeeeeess...");
+    //     }else {
+    //         return("fail...");
+    //     }
+    // }
 
-        }else {
-            return("fail...");
-        }
-    }
+    
      
     async getAllUsers(){
        const allUsers = await this.userModel.find({"isReturned": false, "dateReturned": null}).populate('book').exec();
@@ -134,7 +146,7 @@ export class UsersService {
 
 
 
-    @Cron(CronExpression.EVERY_5_SECONDS)
+    // @Cron(CronExpression.EVERY_5_SECONDS)
     async getWhenShouldReturnBook(){
         const allUsers = await this.userModel.find({"shouldReturn": false }).exec();
         for(let i=0;i<allUsers.length;i++){
@@ -143,12 +155,12 @@ export class UsersService {
                 console.log("i saw number 0..");
                 await this.userModel.findByIdAndUpdate({_id: allUsers[i]._id}, { "$set": { "shouldReturn": true}}).exec();
                 await this.bookModel.findByIdAndUpdate({_id: allUsers[i].book[0]}, { "$set": { "shouldBeReturned": true}}).exec();
-                await this.sendServer.send({
-                    to: 'hawkander.666@gmail.com',
-                    from:'hawkander.666@gmail.com',
-                    subject: 'Test subject here....',
-                    text: 'Hello ......',
-                });
+                // await this.mailService.sendMail({
+                //     to: 'hawkander.666@gmail.com',
+                //     from:'hawkander.666@gmail.com',
+                //     subject: 'Test subject here....',
+                //     text: 'Hello ......',
+                // });
                 console.log("Succeeeeess...");
             }
             // }else if(moment(allUsers[i].dateRestitution).add(1, 'days').date() < moment(Date.now()).add(1, 'days').date()){

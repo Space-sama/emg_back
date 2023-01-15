@@ -7,12 +7,13 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, UsePipes } from
 import { CreateUserDTO } from 'src/dtos/create-users.dto';
 import { UpdateUserDTO } from 'src/dtos/update-users.dto';
 import { User } from './user.model';
+import { SendGridService } from '@anchan828/nest-sendgrid';
 
 
 @Controller('users')
 export class UsersController {
 
-    constructor(private readonly userService:UsersService){
+    constructor(private readonly userService:UsersService, ){
 
     }
 
@@ -20,7 +21,7 @@ export class UsersController {
 
     @Post('sayHello')
     async sayHello():Promise<any>{
-        return await this.userService.sayHello();
+        return await this.userService.send();
     }
 
     @Get('getOnlyIfShouldReturn')
