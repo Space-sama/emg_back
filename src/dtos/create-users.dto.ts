@@ -109,5 +109,13 @@ export class CreateUserDTO {
     @IsNotEmpty()
     @IsString()
     hist_Domain: string
-    
+
+    @IsNotEmpty()
+    @IsNumber()
+    tentative: number
+
+    @IsNotEmpty()
+    @IsDate()
+    activateIn: Date
+
 }

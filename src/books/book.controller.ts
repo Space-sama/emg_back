@@ -1,3 +1,4 @@
+import { Book } from './book.model';
 import { BookValidationPipes } from './../PipeValidation/book-info-validation.pipe';
 import { UpdateBookDTO } from './../dtos/update-book.dto';
 import { CreateBookDTO } from './../dtos/create-book.dto';
@@ -11,7 +12,57 @@ export class BooksController {
     constructor(private readonly bookService:BookService){
 
     }
-    
+
+    @Get('historyByName')
+    async getHistoryBooksByName(){
+        return await this.bookService.getHistoryBookByNameInfo();
+    }
+
+    @Get('/totalBooksInfo')
+    async totalBooksInfo(){
+        return await this.bookService.totalBooksInfo();
+    }
+
+    @Get('/used')
+    async usedDocs(){
+        return await this.bookService.usedDocuments();
+    }
+
+    @Get('/unused')
+    async anusedDocs(){
+        return await this.bookService.unusedDocs();
+    }
+
+    @Get('/totalBooksID')
+    async totalBooksID(){
+        return await this.bookService.totalBooksID();
+    }
+
+    @Get('/totalBooksFN')
+    async totalBooksFN(){
+        return await this.bookService.totalBooksFN();
+    }
+
+    @Get('/totalBooksGN')
+    async totalBooksGN(){
+        return await this.bookService.totalBooksGN();
+    }
+
+    @Get('/totalBooksEL')
+    async totalBooksEL(){
+        return await this.bookService.totalBooksEL();
+    }
+
+    @Get('/totalBooksCV')
+    async totalBooksCV(){
+        return await this.bookService.totalBooksCV();
+    }
+
+    @Get('/totalBooksSM')
+    async totalBooksSM(){
+        return await this.bookService.totalBooksSM();
+    }
+
     @Get()
     getAllBooks(){
         return this.bookService.getAllBooks();
@@ -26,10 +77,12 @@ export class BooksController {
     getOneBook(@Param('id') idBook){
         return this.bookService.getOneBook(idBook);
     }
+    
 
     @Post('/getByFields')
     getByFields(@Body() bookObj:UpdateBookDTO){
-        return this.bookService.getByFields(bookObj.nameBook, bookObj.author, bookObj.edition, bookObj.editor, bookObj.domain);
+        return this.bookService
+        .getByFields(bookObj.nameBook, bookObj.author, bookObj.edition, bookObj.editor, bookObj.domain);
     }
 
     // @Get('/getByFields/:nameBook/:author/:label')

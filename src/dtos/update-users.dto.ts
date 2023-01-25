@@ -94,5 +94,13 @@ export class UpdateUserDTO {
     @IsOptional()
     @IsString()
     hist_Domain: string
+
+    @IsOptional()
+    @IsNumber()
+    tentative: string
+
+    @IsOptional()
+    @IsDate()
+    activateIn: Date
     
 }

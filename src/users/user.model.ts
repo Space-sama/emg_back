@@ -80,7 +80,11 @@ export class User {
     @Prop({default: ""})
     hist_Domain: string
 
+    @Prop()
+    tentative: number
 
+    @Prop()
+    activateIn: Date
 
     @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }])
     book: Book[]

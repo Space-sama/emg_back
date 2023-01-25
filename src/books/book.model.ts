@@ -7,7 +7,6 @@ export type BookDocument = Book & mongoose.Document
 @Schema()
 export class Book {
 
-
     @Prop()
     nameBook: string
 
@@ -39,6 +38,9 @@ export class Book {
     @Prop()
     bookType: string
 
+    @Prop()
+    counter: number
+
     @Prop({type: String, enum: ['Active', 'Inactive']})
     status: string
 
@@ -59,7 +61,9 @@ export class Book {
 
     @Prop({default: ""})
     issuedByLastName: String
-    
+
+    @Prop()
+    keyWords: []
 
     // Category = Domain
     @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }])

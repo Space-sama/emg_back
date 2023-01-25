@@ -25,7 +25,6 @@ export class AdminController {
     @Get('auth')
     async getAuthenticated(@Req() req:Request){
         try {
-            console.log("hellooo");
             const cookie = req.cookies['jwt-3'];
             // const
             console.log("Get cookie getAuth --->", cookie);

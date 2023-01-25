@@ -19,9 +19,54 @@ export class UsersController {
 
 
 
-    @Post('sayHello')
+    @Get('sayHello')
     async sayHello():Promise<any>{
         return await this.userService.send();
+    }
+
+    @Get('all')
+    async all():Promise<User[]>{
+        return await this.userService.users();
+    }
+
+    @Get('alreadyIssued')
+    async alreadyIssued():Promise<Number>{
+        return await this.userService.booksAlreadyIssued();
+    }
+
+    @Get('alreadyIssuedCivil')
+    async alreadyIssuedCivil():Promise<any>{
+        return await this.userService.booksAlreadyIssuedCivilEng();
+    }
+
+    @Get('alreadyIssuedInfo')
+    async alreadyIssuedInfo():Promise<any>{
+        return await this.userService.booksAlreadyIssuedInfoEng();
+    }
+
+    @Get('alreadyIssuedID')
+    async alreadyIssuedID():Promise<any>{
+        return await this.userService.booksAlreadyIssuedIDEng();
+    }
+
+    @Get('alreadyIssuedEL')
+    async alreadyIssuedEL():Promise<any>{
+        return await this.userService.booksAlreadyIssuedEL();
+    }
+
+    @Get('alreadyIssuedSM')
+    async alreadyIssuedSM():Promise<any>{
+        return await this.userService.booksAlreadyIssuedSM();
+    }
+
+    @Get('alreadyIssuedFN')
+    async alreadyIssuedFN():Promise<any>{
+        return await this.userService.booksAlreadyIssuedFN();
+    }
+
+    @Get('alreadyIssuedGN')
+    async alreadyIssuedGN():Promise<any>{
+        return await this.userService.booksAlreadyIssuedGN();
     }
 
     @Get('getOnlyIfShouldReturn')
@@ -32,6 +77,21 @@ export class UsersController {
     @Get()
     async getAll():Promise<User[]>{
         return await this.userService.getAllUsers();
+    }
+
+    @Get('students')
+    async getStudents():Promise<User[]>{
+        return await this.userService.getStudents();
+    }
+
+    @Get('profs')
+    async getProfs():Promise<User[]>{
+        return await this.userService.getProfesseurs();
+    }
+
+    @Get('administratif')
+    async getAdministratif():Promise<User[]>{
+        return await this.userService.getAdministrative();
     }
 
     @Get('history')
@@ -57,11 +117,13 @@ export class UsersController {
     }
 
     @Post()
-    // @UsePipes(UserValidationPipes)
-    // @UsePipes(UserValidationPipesProfession)
-    // @UsePipes(UserValidationPipesSexe)
     addOneUser(@Body() userObj:CreateUserDTO):Promise<User>{
         return this.userService.addOneUser(userObj);
+    }
+
+    @Post('exist')
+    addOneUserByCIN(@Body() userObj:CreateUserDTO):Promise<User>{
+        return this.userService.addUserByCIN(userObj);
     }
 
     @Put(':id')
