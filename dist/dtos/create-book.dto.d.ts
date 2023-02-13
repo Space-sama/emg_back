@@ -18,4 +18,6 @@ export declare class CreateBookDTO {
     issuedByLastName: string;
     updatedAt: string;
     domain: any;
+    readonly counter: number;
+    keyWords: string;
 }

@@ -84,5 +84,15 @@ export class UpdateBookDTO {
     @IsOptional()
     @IsMongoId()
     public domain: any
+
+    @IsOptional()
+    @IsNumber()
+    @Prop({required: false})
+    readonly counter: number
+
+    @IsNotEmpty()
+    @IsString()
+    @IsOptional()
+    readonly keyWords: string
     
 }

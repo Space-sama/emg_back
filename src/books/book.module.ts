@@ -1,3 +1,4 @@
+import { Pareto_Book, ParetoBookSchema } from './../pareto_books/pareto_book.model';
 import { Book, BookSchema } from './book.model';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -12,6 +13,7 @@ import { User, UserSchema } from 'src/users/user.model';
       [
         { name: Book.name, schema: BookSchema },
         { name: User.name, schema: UserSchema },
+        { name: Pareto_Book.name, schema: ParetoBookSchema },
       ]),
   
 ],

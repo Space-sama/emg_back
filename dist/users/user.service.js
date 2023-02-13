@@ -258,10 +258,14 @@ let UsersService = class UsersService {
             return ("Cet utilisateur à déjà emprunté deux documents !");
         }
         else {
+            if (moment(userObj.dateRestitution) <= now) {
+                return (`La date doît être sous format: Année-Mois-Jour et être supérieur d'aujourd'hui !`);
+            }
             let userCreated = await userToSave.save();
             await this.bookModel.findByIdAndUpdate({ "_id": userCreated.book[0] }, { "$set": { "isIssued": true,
                     "issuedByFirstName": findByCin[0].firstName, "issuedByLastName": findByCin[0].lastName,
-                    "counter": 1 } }).exec();
+                } }).exec();
+            await this.bookModel.findOneAndUpdate({ "_id": userCreated.book[0] }, { $inc: { "counter": 1 } }).exec();
             if (!findWarningUser) {
                 let newWarning = new this.warningModel({
                     f_name: userCreated.firstName,
@@ -322,9 +326,15 @@ let UsersService = class UsersService {
             return ("Cet utilisateur à déjà emprunté deux documents !");
         }
         else {
+            if (moment(userObj.dateRestitution) <= now) {
+                return (`La date doît être sous format: Année-Mois-Jour et être supérieur d'aujourd'hui !`);
+            }
             let userCreated = await userToSave.save();
             await this.bookModel.findByIdAndUpdate({ "_id": userCreated.book[0] }, { "$set": { "isIssued": true,
-                    "issuedByFirstName": userObj.firstName, "issuedByLastName": userObj.lastName, "counter": 1 } }).exec();
+                    "issuedByFirstName": userObj.firstName, "issuedByLastName": userObj.lastName
+                },
+            }).exec();
+            await this.bookModel.findOneAndUpdate({ "_id": userCreated.book[0] }, { $inc: { "counter": 1 } }).exec();
             if (!findWarningUser) {
                 let newWarning = new this.warningModel({
                     f_name: userCreated.firstName,

@@ -82,7 +82,7 @@ export class BooksController {
     @Post('/getByFields')
     getByFields(@Body() bookObj:UpdateBookDTO){
         return this.bookService
-        .getByFields(bookObj.nameBook, bookObj.author, bookObj.edition, bookObj.editor, bookObj.domain);
+        .getByFields(bookObj.nameBook, bookObj.author, bookObj.edition, bookObj.editor, bookObj.domain, bookObj.keyWords);
     }
 
     // @Get('/getByFields/:nameBook/:author/:label')

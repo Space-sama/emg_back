@@ -13,22 +13,76 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookService = void 0;
+const dist_1 = require("@nestjs/schedule/dist");
+const pareto_book_model_1 = require("./../pareto_books/pareto_book.model");
 const user_model_1 = require("./../users/user.model");
 const book_model_1 = require("./book.model");
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const mongoose_2 = require("@nestjs/mongoose");
 let BookService = class BookService {
-    constructor(bookModel, userModel) {
+    constructor(bookModel, userModel, paretoBookModel) {
         this.bookModel = bookModel;
         this.userModel = userModel;
+        this.paretoBookModel = paretoBookModel;
     }
     async getAllBooks() {
         const books = await this.bookModel.find({}).populate('domain').exec();
         return books;
     }
     async usedDocuments() {
-        const usedDocs = await this.bookModel.find({ "counter": 1 }).populate('domain').exec();
+        let myCounterNumbers = 0;
+        let myCounterBooks = 0;
+        let myTotalNumbersCounter = 0;
+        let cumulEmprunt = 0;
+        let pourcentage = 0;
+        let cumulPourcentage = 0;
+        let bookPourcentage = 0;
+        const usedDocs = await this.bookModel.find({ "counter": { $gt: 0 }, "status": "Active" })
+            .sort([['counter', 'descending']]).populate('domain').exec();
+        for (let i = 1; i < usedDocs.length - 1; i++) {
+            myCounterNumbers = myCounterNumbers + usedDocs[i].counter;
+        }
+        myTotalNumbersCounter = myCounterNumbers;
+        console.log("Total Cumul is --> ", myTotalNumbersCounter);
+        myCounterBooks = usedDocs.length;
+        console.log("Total Books --> ", myCounterBooks);
+        for (let i = 1; i < usedDocs.length - 1; i++) {
+            cumulEmprunt = cumulEmprunt + usedDocs[i].counter;
+            console.log("CUMUL EMPRUNT ---> ", cumulEmprunt);
+            pourcentage = (usedDocs[i].counter / myTotalNumbersCounter * 100);
+            console.log("Book  ", usedDocs[i].nameBook, "His percentage is ", pourcentage.toFixed(2), " %");
+            cumulPourcentage = cumulPourcentage + pourcentage;
+            console.log("CUMUL Percentage IS -----> ######### ", cumulPourcentage.toFixed(2), " %");
+            bookPourcentage = (i / usedDocs.length * 100);
+            console.log("helloooooooooooooooooooooooo", bookPourcentage, " i ", usedDocs.length);
+            let paretoBookToSave = new this.paretoBookModel({
+                nameBook: usedDocs[i].nameBook,
+                identifiant: usedDocs[i].identifiant,
+                location: usedDocs[i].location,
+                counter: usedDocs[i].counter,
+                cumulEmprunt: cumulEmprunt,
+                pourcentage: pourcentage,
+                cumulPourcentage: cumulPourcentage,
+                bookPourcentage: bookPourcentage,
+                domain: usedDocs[i].domain[0].label
+            });
+            let findBeforeAddBook = await this.paretoBookModel.findOne({
+                "nameBook": usedDocs[i].nameBook,
+            }).exec();
+            if (!findBeforeAddBook) {
+                let paretoBookCreated = await paretoBookToSave.save();
+                if (paretoBookCreated) {
+                    console.log("Pareto book created");
+                }
+                else {
+                    console.log("Error creating pareto book !");
+                }
+            }
+            else {
+                console.log("Pareto Book ALREADY EXIST.....");
+            }
+        }
         return usedDocs;
     }
     async unusedDocs() {
@@ -62,7 +116,7 @@ let BookService = class BookService {
     async getAllBooksByDispo() {
         return await this.bookModel.find({ isIssued: 'false' }).populate('domain').exec();
     }
-    async getByFields(title, author, edition, editor, label) {
+    async getByFields(title, author, edition, editor, label, keyWords) {
         let objFounded = await this.bookModel.find({
             $or: [
                 {
@@ -79,6 +133,9 @@ let BookService = class BookService {
                 },
                 {
                     "domain": label
+                },
+                {
+                    "keyWords": { $regex: `${keyWords}` }
                 },
             ]
         }).populate('domain').exec();
@@ -334,11 +391,19 @@ let BookService = class BookService {
         return await this.bookModel.findOne({ code: codeBook });
     }
 };
+__decorate([
+    (0, dist_1.Cron)(dist_1.CronExpression.EVERY_10_SECONDS),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BookService.prototype, "usedDocuments", null);
 BookService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_2.InjectModel)(book_model_1.Book.name)),
     __param(1, (0, mongoose_2.InjectModel)(user_model_1.User.name)),
+    __param(2, (0, mongoose_2.InjectModel)(pareto_book_model_1.Pareto_Book.name)),
     __metadata("design:paramtypes", [mongoose_1.Model,
+        mongoose_1.Model,
         mongoose_1.Model])
 ], BookService);
 exports.BookService = BookService;

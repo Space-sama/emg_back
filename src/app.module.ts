@@ -1,3 +1,4 @@
+import { ParetoBookModule } from './pareto_books/pareto_book.module';
 import { WarningModule } from './user_warnings/warning.module';
 import { CategoryModule } from './categories/category.module';
 import { BookModule } from './books/book.module';
@@ -48,12 +49,13 @@ require("dotenv").config();
     Book_Req_Module,
     AdminModule,
     WarningModule,
+    ParetoBookModule,
     
     
-    MongooseModule.forRoot(
-    `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.ljs3d.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`
-    ),
-    // MongooseModule.forRoot("mongodb://localhost:27017/biblio"),
+    // MongooseModule.forRoot(
+    // `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.ljs3d.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`
+    // ),
+    MongooseModule.forRoot("mongodb://localhost:27017/biblio"),
     ScheduleModule.forRoot()
   ],
   controllers: [AppController],

@@ -109,5 +109,17 @@ __decorate([
     (0, class_validator_1.IsMongoId)(),
     __metadata("design:type", Object)
 ], UpdateBookDTO.prototype, "domain", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", Number)
+], UpdateBookDTO.prototype, "counter", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateBookDTO.prototype, "keyWords", void 0);
 exports.UpdateBookDTO = UpdateBookDTO;
 //# sourceMappingURL=update-book.dto.js.map

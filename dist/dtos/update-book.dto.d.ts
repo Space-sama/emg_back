@@ -15,4 +15,6 @@ export declare class UpdateBookDTO {
     issuedByLastName: string;
     status: string;
     domain: any;
+    readonly counter: number;
+    readonly keyWords: string;
 }

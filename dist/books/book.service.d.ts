@@ -1,3 +1,4 @@
+import { BookParetoDocument } from './../pareto_books/pareto_book.model';
 import { UserDocument } from './../users/user.model';
 import { Book, BookDocument } from './book.model';
 import { Model } from 'mongoose';
@@ -5,7 +6,8 @@ import { DeleteResult, UpdateResult } from "typeorm";
 export declare class BookService {
     private bookModel;
     private userModel;
-    constructor(bookModel: Model<BookDocument>, userModel: Model<UserDocument>);
+    private paretoBookModel;
+    constructor(bookModel: Model<BookDocument>, userModel: Model<UserDocument>, paretoBookModel: Model<BookParetoDocument>);
     getAllBooks(): Promise<Omit<Book & import("mongoose").Document<any, any, any> & {
         _id: import("mongoose").Types.ObjectId;
     }, never>[]>;
@@ -19,7 +21,7 @@ export declare class BookService {
     getAllBooksByDispo(): Promise<Omit<Book & import("mongoose").Document<any, any, any> & {
         _id: import("mongoose").Types.ObjectId;
     }, never>[]>;
-    getByFields(title: String, author: String, edition?: Date, editor?: String, label?: String): Promise<Omit<Book & import("mongoose").Document<any, any, any> & {
+    getByFields(title: String, author: String, edition?: Date, editor?: String, label?: String, keyWords?: String): Promise<Omit<Book & import("mongoose").Document<any, any, any> & {
         _id: import("mongoose").Types.ObjectId;
     }, never>[]>;
     getOneBook(idBook: any): Promise<any>;

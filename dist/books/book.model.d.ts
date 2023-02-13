@@ -20,7 +20,7 @@ export declare class Book {
     shouldBeReturned: Boolean;
     issuedByFirstName: String;
     issuedByLastName: String;
-    keyWords: [];
+    keyWords: String;
     domain: Category;
 }
 export declare const BookSchema: mongoose.Schema<Book, mongoose.Model<Book, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, Book>;

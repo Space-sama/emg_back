@@ -118,5 +118,16 @@ __decorate([
     (0, class_validator_1.IsMongoId)(),
     __metadata("design:type", Object)
 ], CreateBookDTO.prototype, "domain", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNumber)(),
+    (0, mongoose_1.Prop)({ required: false }),
+    __metadata("design:type", Number)
+], CreateBookDTO.prototype, "counter", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateBookDTO.prototype, "keyWords", void 0);
 exports.CreateBookDTO = CreateBookDTO;
 //# sourceMappingURL=create-book.dto.js.map

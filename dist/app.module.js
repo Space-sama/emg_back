@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const pareto_book_module_1 = require("./pareto_books/pareto_book.module");
 const warning_module_1 = require("./user_warnings/warning.module");
 const category_module_1 = require("./categories/category.module");
 const book_module_1 = require("./books/book.module");
@@ -34,6 +35,7 @@ AppModule = __decorate([
             book_req_module_1.Book_Req_Module,
             admin_module_1.AdminModule,
             warning_module_1.WarningModule,
+            pareto_book_module_1.ParetoBookModule,
             mongoose_1.MongooseModule.forRoot("mongodb://localhost:27017/biblio"),
             schedule_1.ScheduleModule.forRoot()
         ],

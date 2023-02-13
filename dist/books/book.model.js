@@ -88,8 +88,8 @@ __decorate([
     __metadata("design:type", String)
 ], Book.prototype, "issuedByLastName", void 0);
 __decorate([
-    (0, mongoose_1.Prop)(),
-    __metadata("design:type", Array)
+    (0, mongoose_1.Prop)({ type: String }),
+    __metadata("design:type", String)
 ], Book.prototype, "keyWords", void 0);
 __decorate([
     (0, mongoose_1.Prop)([{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }]),

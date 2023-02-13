@@ -62,8 +62,8 @@ export class Book {
     @Prop({default: ""})
     issuedByLastName: String
 
-    @Prop()
-    keyWords: []
+    @Prop({type: String})
+    keyWords: String
 
     // Category = Domain
     @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }])

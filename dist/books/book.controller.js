@@ -62,7 +62,7 @@ let BooksController = class BooksController {
     }
     getByFields(bookObj) {
         return this.bookService
-            .getByFields(bookObj.nameBook, bookObj.author, bookObj.edition, bookObj.editor, bookObj.domain);
+            .getByFields(bookObj.nameBook, bookObj.author, bookObj.edition, bookObj.editor, bookObj.domain, bookObj.keyWords);
     }
     addOneBook(bookObj) {
         return this.bookService.addOneBook(bookObj);

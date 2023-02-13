@@ -6,29 +6,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BookModule = void 0;
-const pareto_book_model_1 = require("./../pareto_books/pareto_book.model");
-const book_model_1 = require("./book.model");
+exports.ParetoBookModule = void 0;
+const pareto_book_controller_1 = require("./pareto_book.controller");
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
-const book_service_1 = require("./book.service");
-const book_controller_1 = require("./book.controller");
-const user_model_1 = require("../users/user.model");
-let BookModule = class BookModule {
+const pareto_book_model_1 = require("./pareto_book.model");
+const pareto_book_service_1 = require("./pareto_book.service");
+let ParetoBookModule = class ParetoBookModule {
 };
-BookModule = __decorate([
+ParetoBookModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([
-                { name: book_model_1.Book.name, schema: book_model_1.BookSchema },
-                { name: user_model_1.User.name, schema: user_model_1.UserSchema },
                 { name: pareto_book_model_1.Pareto_Book.name, schema: pareto_book_model_1.ParetoBookSchema },
             ]),
         ],
-        controllers: [book_controller_1.BooksController],
-        providers: [book_service_1.BookService],
-        exports: [book_service_1.BookService],
+        controllers: [pareto_book_controller_1.ParetoBooksController],
+        providers: [pareto_book_service_1.ParetoBookService],
+        exports: [pareto_book_service_1.ParetoBookService],
     })
-], BookModule);
-exports.BookModule = BookModule;
-//# sourceMappingURL=book.module.js.map
+], ParetoBookModule);
+exports.ParetoBookModule = ParetoBookModule;
+//# sourceMappingURL=pareto_book.module.js.map

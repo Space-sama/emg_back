@@ -89,5 +89,13 @@ export class CreateBookDTO {
     @IsNotEmpty()
     @IsMongoId()
     public domain: any
+
+    @IsNotEmpty()
+    @IsNumber()
+    @Prop({required: false})
+    readonly counter: number
     
+    @IsNotEmpty()
+    @IsString()
+    public keyWords: string
 }

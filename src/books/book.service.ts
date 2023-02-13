@@ -1,3 +1,5 @@
+import { Cron, CronExpression } from '@nestjs/schedule/dist';
+import { Pareto_Book, BookParetoDocument } from './../pareto_books/pareto_book.model';
 import { User, UserDocument } from './../users/user.model';
 import { Book, BookDocument } from './book.model';
 import { Injectable, NotFoundException } from "@nestjs/common";
@@ -9,7 +11,8 @@ import { DeleteResult, UpdateResult } from "typeorm";
 export class BookService {
 
     constructor(@InjectModel(Book.name) private bookModel: Model<BookDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,){
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Pareto_Book.name) private paretoBookModel: Model<BookParetoDocument>){
 
     }
      
@@ -18,8 +21,72 @@ export class BookService {
       return books;
     }
 
+    @Cron(CronExpression.EVERY_10_SECONDS)
     async usedDocuments(){
-      const usedDocs = await this.bookModel.find({"counter": 1}).populate('domain').exec();
+      let myCounterNumbers: number=0;
+      let myCounterBooks: number=0;
+      let myTotalNumbersCounter: number=0;
+      let cumulEmprunt: number=0;
+      let pourcentage: number=0;
+      let cumulPourcentage: number=0;
+      let bookPourcentage: number=0;
+      const usedDocs = await this.bookModel.find(
+      {"counter": {$gt: 0}, "status": "Active"})
+      .sort([['counter', 'descending']]).populate('domain').exec();
+        // take total Cumul
+      for(let i=1;i<usedDocs.length-1;i++){
+        myCounterNumbers = myCounterNumbers+usedDocs[i].counter;
+      }
+      myTotalNumbersCounter = myCounterNumbers;
+      console.log("Total Cumul is --> ", myTotalNumbersCounter);
+
+      myCounterBooks = usedDocs.length;
+      console.log("Total Books --> ", myCounterBooks);
+
+      // Take Cumulation of each row
+      for(let i=1;i<usedDocs.length-1;i++){
+        cumulEmprunt = cumulEmprunt+usedDocs[i].counter;
+        console.log("CUMUL EMPRUNT ---> ",cumulEmprunt);
+
+        // Calculate pourcentage of each row
+        pourcentage = (usedDocs[i].counter / myTotalNumbersCounter * 100);
+        console.log("Book  ", usedDocs[i].nameBook, "His percentage is ", pourcentage.toFixed(2), " %");
+
+
+        // Calculate cumul pourcentage of each row
+        cumulPourcentage = cumulPourcentage+pourcentage;
+        console.log("CUMUL Percentage IS -----> ######### ", cumulPourcentage.toFixed(2), " %");
+
+        // book percentage
+        bookPourcentage = (i / usedDocs.length * 100);
+        console.log("helloooooooooooooooooooooooo", bookPourcentage, " i ", usedDocs.length);
+        let paretoBookToSave = new this.paretoBookModel({
+          nameBook: usedDocs[i].nameBook,
+          identifiant: usedDocs[i].identifiant,
+          location: usedDocs[i].location,
+          counter: usedDocs[i].counter,
+          cumulEmprunt: cumulEmprunt,
+          pourcentage: pourcentage,
+          cumulPourcentage: cumulPourcentage,
+          bookPourcentage: bookPourcentage,
+          domain: usedDocs[i].domain[0].label
+        });
+        let findBeforeAddBook:Pareto_Book = await this.paretoBookModel.findOne({
+          "nameBook": usedDocs[i].nameBook,
+        }).exec();
+
+        if(!findBeforeAddBook){
+          let paretoBookCreated = await paretoBookToSave.save();
+          if(paretoBookCreated){
+            console.log("Pareto book created");
+          }else{
+            console.log("Error creating pareto book !");
+          }
+        }else{
+          console.log("Pareto Book ALREADY EXIST.....");
+        }
+        
+      }
       return usedDocs;
     }
 
@@ -63,7 +130,7 @@ export class BookService {
         return await this.bookModel.find({isIssued: 'false'}).populate('domain').exec();
     }
 
-     async getByFields(title: String, author: String,  edition?: Date, editor?: String, label?: String){
+     async getByFields(title: String, author: String,  edition?: Date, editor?: String, label?: String, keyWords?: String){
         let objFounded= await this.bookModel.find({
                   $or: [
                     {
@@ -80,6 +147,9 @@ export class BookService {
                     },
                     {
                       "domain": label
+                    },
+                    {
+                      "keyWords": {$regex: `${keyWords}`}
                     },
                     
                     
