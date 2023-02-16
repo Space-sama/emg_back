@@ -10,10 +10,7 @@ import { AppService } from './app.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { Book_Req_Module } from './book_requests/book_req.module';
 import { AdminModule } from './admin/admin.module';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { SendGridModule } from "@anchan828/nest-sendgrid";
-import { ConfigModule } from '@nestjs/config';
-import { MailgunModule } from 'nestjs-mailgun';
 
 require("dotenv").config();
 
@@ -52,10 +49,10 @@ require("dotenv").config();
     ParetoBookModule,
     
     
-    // MongooseModule.forRoot(
-    // `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.ljs3d.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`
-    // ),
-    MongooseModule.forRoot("mongodb://localhost:27017/biblio"),
+    MongooseModule.forRoot(
+    `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.ljs3d.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`
+    ),
+    // MongooseModule.forRoot("mongodb://localhost:27017/biblio"),
     ScheduleModule.forRoot()
   ],
   controllers: [AppController],
