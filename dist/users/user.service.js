@@ -229,14 +229,14 @@ let UsersService = class UsersService {
             updatedAt: "",
             status: "Active",
             dateIssuedBook: Date.now() + 1,
-            dateRestitution: moment(userObj.dateRestitution).add(1, 'hours'),
+            dateRestitution: moment().add(14, 'days').add(-1, 'hours'),
             isReturned: false,
             dateReturned: null,
             tentative: 0,
             activateIn: null,
             book: userObj.book,
-            daysLeft: moment.duration(moment(userObj.dateRestitution).diff(now)).asDays(),
-            forTimeOf: moment.duration(moment(userObj.dateRestitution).add('days').diff(now)).asDays(),
+            daysLeft: moment.duration(moment().add(14, 'days').diff(now)).asDays().toFixed(0),
+            forTimeOf: moment.duration(moment().add(14, 'days').diff(now)).asDays().toFixed(0),
         });
         let findWarningUser = await this.warningService.findByCin(userToSave.CIN);
         if (findWarningUser) {
@@ -297,14 +297,14 @@ let UsersService = class UsersService {
             updatedAt: "",
             status: "Active",
             dateIssuedBook: Date.now() + 1,
-            dateRestitution: moment(userObj.dateRestitution).add(1, 'hours'),
+            dateRestitution: moment().add(14, 'days').add(-1, 'hours'),
             isReturned: false,
             dateReturned: null,
             tentative: 0,
             activateIn: null,
             book: userObj.book,
-            daysLeft: moment.duration(moment(userObj.dateRestitution).diff(now)).asDays(),
-            forTimeOf: moment.duration(moment(userObj.dateRestitution).add('days').diff(now)).asDays(),
+            daysLeft: moment.duration(moment().add(14, 'days').diff(now)).asDays().toFixed(0),
+            forTimeOf: moment.duration(moment().add(14, 'days').diff(now)).asDays().toFixed(0),
         });
         let findWarningUser = await this.warningService.findByCin(userToSave.CIN);
         if (findWarningUser) {
@@ -380,7 +380,7 @@ let UsersService = class UsersService {
                 console.log("days left befor updating ", allUsers[i].daysLeft);
                 let now = moment().startOf('day');
                 let restitution = moment(allUsers[i].dateRestitution).add(-1, "hours");
-                let left = moment.duration(restitution.diff(now)).asDays();
+                let left = moment.duration(restitution.diff(now)).asDays().toFixed(0);
                 console.log("now", now);
                 console.log("restitu", restitution);
                 console.log("left -------------", left);
