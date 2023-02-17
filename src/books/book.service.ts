@@ -183,14 +183,14 @@ export class BookService {
         });
         let findAlreadyExist = await this.bookModel.find(
           {$or: [
-            { ISBN: bookToSave.ISBN },
+            { ISBN: bookToSave.nameBook },
             { identifiant: bookToSave.identifiant },
             { location: bookToSave.location }
           ]});
 
           if(findAlreadyExist.length > 0){
-            console.log("Ce document déjà existe dans la bibliothèque !");
-            return("Ce document déjà existe dans la bibliothèque !");
+            console.log("L'Identifiant ou l'Emplacement déjà utilisé");
+            return("L'Identifiant ou l'Emplacement déjà utilisé");
           }else {
             let bookCreated = await bookToSave.save();
             return bookCreated;

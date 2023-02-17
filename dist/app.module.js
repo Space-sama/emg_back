@@ -36,7 +36,7 @@ AppModule = __decorate([
             admin_module_1.AdminModule,
             warning_module_1.WarningModule,
             pareto_book_module_1.ParetoBookModule,
-            mongoose_1.MongooseModule.forRoot("mongodb://localhost:27017/biblio"),
+            mongoose_1.MongooseModule.forRoot(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.ljs3d.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`),
             schedule_1.ScheduleModule.forRoot()
         ],
         controllers: [app_controller_1.AppController],
