@@ -185,12 +185,12 @@ export class BookService {
           {$or: [
             { ISBN: bookToSave.nameBook },
             { identifiant: bookToSave.identifiant },
-            { location: bookToSave.location }
+            // { location: bookToSave.location }
           ]});
 
           if(findAlreadyExist.length > 0){
-            console.log("L'Identifiant ou l'Emplacement déjà utilisé");
-            return("L'Identifiant ou l'Emplacement déjà utilisé");
+            console.log("Cet identifiant à été déjà utilisé");
+            return("Cet identifiant à été déjà utilisé");
           }else {
             let bookCreated = await bookToSave.save();
             return bookCreated;
